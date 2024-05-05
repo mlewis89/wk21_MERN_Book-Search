@@ -1,3 +1,4 @@
+const {GraphQLError} = require('graphql');
 const jwt = require('jsonwebtoken');
 
 // set token secret and expiration date
@@ -5,6 +6,7 @@ const secret = 'mysecretsshhhhh';
 const expiration = '2h';
 
 module.exports = {
+  /*
   // function for our authenticated routes
   authMiddleware: function (req, res, next) {
     // allows token to be sent via  req.query or headers
@@ -35,5 +37,16 @@ module.exports = {
     const payload = { username, email, _id };
 
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
-  },
+  },*/
+
+  AuthenticationEroor: new GraphQLError('Could not authentinticate user.',
+  {
+    extentions: {
+      code: 'UNAUTHENTICATED',
+    },
+  }),
+  sighToken: function ({email, username, _id}){
+    const payload = {email, username, _id};
+    return jwt.sign({data:payload}, secret, {expiresIn: expiration});
+  }
 };
