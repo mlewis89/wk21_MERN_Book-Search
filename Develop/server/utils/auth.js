@@ -39,13 +39,13 @@ module.exports = {
     return jwt.sign({ data: payload }, secret, { expiresIn: expiration });
   },*/
 
-  AuthenticationEroor: new GraphQLError('Could not authentinticate user.',
+  AuthenticationError: new GraphQLError('Could not authentinticate user.',
   {
     extentions: {
       code: 'UNAUTHENTICATED',
     },
   }),
-  sighToken: function ({email, username, _id}){
+  signToken: function ({email, username, _id}){
     const payload = {email, username, _id};
     return jwt.sign({data:payload}, secret, {expiresIn: expiration});
   }

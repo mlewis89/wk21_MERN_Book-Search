@@ -1,27 +1,54 @@
-const { Query } = require('mongoose');
-const {User, Book} = require('../models');
-const { signToken, AuthenticationError } = require('../utils/auth');
+const { User} = require("../models");
+const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
-    Query: {
-        me: async ()=>{
-            return User;
-        }
+  Query: {
+    me: async (parent, { user = null, params }) => {
+      const foundUser = await User.findOne({
+        $or: [
+          { _id: user ? user._id : params.id },
+          { username: params.username },
+        ],
+      });
+
+      return foundUser;
     },
-    Mutation:{
-        login: async ()=>{
-            return Auth;
-        },
-        addUser: async ()=>{
-            return Auth;
-        },
-        saveBook: async ()=>{
-            return User;
-        }, 
-        removeBook: async ()=>{
-            return User;
-        },
+  },
+  Mutation: {
+    login: async (parent, {email, password}) => {
+      const user = await User.findOne({email, password});
+      if (!user)
+        {throw AuthenticationError;}
+      const CorrectPw =  await User.isCorrectPassword(password);
+      if(!CorrectPw)
+        {throw AuthenticationError;}
+      const token =  signToken(user);
+      return {token, user};
     },
+    addUser: async (parent, {email, username, password}) => {
+      const user = await User.create({email: email, username: username, passsword: password});
+      if (!user)
+        {throw AuthenticationError;}
+      const token = signToken(user);
+      return { token, user };
+    },
+    saveBook: async (parent, {bookInput}) => {
+       const updatedUser = await User.findOneAndUpdate(
+              { _id: user._id },
+              { $addToSet: { savedBooks: bookInput } },
+              { new: true, runValidators: true }
+            );
+            return updatedUser;
+    },
+    removeBook: async (parent, bookId) => {
+        const updatedUser = await User.findOneAndUpdate(
+            { _id: user._id },
+            { $pull: { savedBooks: { bookId: bookId } } },
+            { new: true }
+          );
+          return updatedUser;
+    },
+  },
 };
 
-module.exports =  resolvers;
+module.exports = resolvers;
