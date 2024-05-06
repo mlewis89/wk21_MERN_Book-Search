@@ -10,5 +10,4 @@ query user($username: String!) {
         savedBooks
       }
     }
-  }
 `;
