@@ -3,11 +3,11 @@ const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
   Query: {
-    me: async (parent, { _id, username } ) => {
+    me: async (parent, args, context ) => {
       const foundUser = await User.findOne({
         $or: [
-          { _id: _id},
-          { username: username },
+          { _id: context._id},
+          { username: context.username },
         ],
       });
 
