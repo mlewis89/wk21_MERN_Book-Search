@@ -15,7 +15,8 @@ const resolvers = {
     },
   },
   Mutation: {
-    login: async (parent, {email, password}) => {
+    login: async (parent, {email, password}) => {      
+      console.log(email, password);
       const user = await User.findOne({email, password});
       if (!user)
         {throw AuthenticationError;}
@@ -23,14 +24,17 @@ const resolvers = {
       if(!CorrectPw)
         {throw AuthenticationError;}
       const token =  signToken(user);
+      console.log(user, token);
       return {token, user};
     },
     addUser: async (parent, {username, email,  password}) => {
+      
       const user = await User.create({email: email, username: username, password: password});
       if (!user)
         {throw AuthenticationError;}
+      
       const token = signToken(user);
-      return { token, user };
+      return { token: token, user: user };
     },
     saveBook: async (parent, {bookInput}) => {
        const updatedUser = await User.findOneAndUpdate(

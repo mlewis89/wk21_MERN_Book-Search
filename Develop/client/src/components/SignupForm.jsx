@@ -22,6 +22,7 @@ const SignupForm = () => {
   };
 
   const handleFormSubmit = async (event) => {
+    console.log("signup submission")
     event.preventDefault();
 
     // check if form has everything (as per react-bootstrap docs)
@@ -32,16 +33,13 @@ const SignupForm = () => {
     }
 
     try {
-      const response = await addUser({
+      const {data} = await addUser({
         variables: {...userFormData}
       });
-      if (!response.ok) {
+      if (error) {
         throw new Error('something went wrong!');
       }
-
-      const { token, user } = await response;
-      console.log(user);
-      Auth.login(token);
+      Auth.login(data.addUser.token);
     } catch (err) {
       console.error(err);
       setShowAlert(true);
