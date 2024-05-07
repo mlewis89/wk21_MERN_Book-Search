@@ -10,50 +10,26 @@ import {
 //import { getMe, deleteBook } from '../utils/API';
 import Auth from '../utils/auth';
 import { removeBookId } from '../utils/localStorage';
-import { QUERY_GET_ME } from '../utils/queries';
+import { useQuery , useMutation} from '@apollo/client';
+import {QUERY_GET_ME} from '../utils/queries';
+import { REMOVE_BOOK } from '../utils/mutations';
+
+
+
 
 const SavedBooks = () => {
-  const [userData, setUserData] = useState({});
+  const {loading, data} = useQuery(QUERY_GET_ME);
 
-  // use this to determine if `useEffect()` hook needs to run again
-  const userDataLength = Object.keys(userData).length;
+  const token = Auth.loggedIn() ? Auth.getToken() : null;
 
-  const { loading, currentUserData } = useQuery(QUERY_GET_ME, {
-    variables: { username: 'Mark' },
-  });
+  const userData = data?.user || {};
+  console.log(userData);
 
 
-/*
-  useEffect(() => {
-    const getUserData = async () => {
-      try {
-        const token = Auth.loggedIn() ? Auth.getToken() : null;
-
-        if (!token) {
-          return false;
-        }
-
-        const response = await getMe(token);
-
-        if (!response.ok) {
-          throw new Error('something went wrong!');
-        }
-
-        const user = await response.json();
-        setUserData(user);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getUserData();
-  }, [userDataLength]);
-*/
 
 
-/*
-  // create function that accepts the book's mongo _id value as param and deletes the book from the database
- const handleDeleteBook = async (bookId) => {
+  /*// create function that accepts the book's mongo _id value as param and deletes the book from the database
+  const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
