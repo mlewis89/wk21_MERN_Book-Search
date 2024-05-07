@@ -12,11 +12,8 @@ import Auth from '../utils/auth';
 import { searchGoogleBooks } from '../utils/API';
 import { saveBookIds, getSavedBookIds } from '../utils/localStorage';
 
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import { SAVE_BOOK } from '../utils/mutations';
-import { QUERY_GET_ME} from '../utils/queries';
-
-
 
 
 const SearchBooks = () => {
@@ -85,7 +82,7 @@ const SearchBooks = () => {
         variables: { _id: id, techNum: techNum },
       });;
 
-      if (!response.ok) {
+      if (error) {
         throw new Error('something went wrong!');
       }
 
