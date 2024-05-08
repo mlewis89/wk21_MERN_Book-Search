@@ -6,12 +6,6 @@ query Me {
     _id
     bookCount
     savedBooks {
-      authors
-      bookId
-      description
-      image
-      link
-      title
     }
     email
     username

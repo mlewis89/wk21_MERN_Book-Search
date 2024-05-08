@@ -3,16 +3,13 @@ const { signToken, AuthenticationError } = require("../utils/auth");
 
 const resolvers = {
   Query: {
-    me: async (parent, args, {user}) => {
-      console.log('user-', user);
+    me: async (parent, args, { user }) => {
       if (user) {
         const foundUser = await User.findOne({
           $or: [{ _id: user._id }, { username: user.username }],
-        })
-        console.log(foundUser);
+        });
         return foundUser;
       }
-      console.log('user-error', user);
       throw AuthenticationError;
     },
   },
@@ -20,7 +17,6 @@ const resolvers = {
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
       if (!user) {
-        console.log("no user found");
         throw AuthenticationError;
       }
 
@@ -44,7 +40,7 @@ const resolvers = {
       const token = signToken(user);
       return { token: token, user: user };
     },
-    saveBook: async (parent, {book}, {user}) => {
+    saveBook: async (parent, { book }, { user }) => {
       const updatedUser = await User.findOneAndUpdate(
         { _id: user._id },
         { $addToSet: { savedBooks: book } },
@@ -52,7 +48,7 @@ const resolvers = {
       );
       return updatedUser;
     },
-    removeBook: async (parent, bookId) => {
+    removeBook: async (parent, { bookId }, { user }) => {
       const updatedUser = await User.findOneAndUpdate(
         { _id: user._id },
         { $pull: { savedBooks: { bookId: bookId } } },

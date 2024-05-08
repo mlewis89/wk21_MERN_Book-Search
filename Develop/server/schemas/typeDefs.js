@@ -16,11 +16,11 @@ const typeDefs= `
         link: String,
     }
 
-    input BookInput {
+    input BookInput {        
+        bookId: String!,
         authors: [String],
         description: String,
         title: String,
-        bookId: String!,
         image: String, 
         link: String,
     }
