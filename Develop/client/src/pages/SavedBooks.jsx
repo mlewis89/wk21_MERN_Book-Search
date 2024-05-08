@@ -24,14 +24,8 @@ const SavedBooks = () => {
   const handleDeleteBook = async (bookId) => {
     
     try {
-      const {data} = await removeBook({variables: {bookId}});
-
-      if (removeError) {
-        throw new Error('something went wrong!');
-      }
-
-      // upon success, remove book's id from localStorage
       removeBookId(bookId);
+      return removeBook({variables: {bookId}});
     } catch (err) {
       console.error(err);
     }
@@ -44,7 +38,7 @@ const SavedBooks = () => {
 
   return (
     <>
-    <div fluid className="text-light bg-dark p-5">
+    <div className="text-light bg-dark p-5">
       <Container>
         <h1>Viewing saved books!</h1>
       </Container>
