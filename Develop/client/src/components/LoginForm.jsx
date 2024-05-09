@@ -1,24 +1,27 @@
-// see SignupForm.js for comments
+// import external library components
 import { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
-
-
-import { LOGIN_USER } from "../utils/mutations";
 import { useMutation } from "@apollo/client";
+
+//import local defintions
+import { LOGIN_USER } from "../utils/mutations";
 import Auth from "../utils/auth";
 
 const LoginForm = () => {
-  const [loginUser, { error }] = useMutation(LOGIN_USER);
+  const [loginUser, { error }] = useMutation(LOGIN_USER);  // create useMutation hook
 
+  //state vales to stor form data
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
 
+  //update state vales on userinput
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUserFormData({ ...userFormData, [name]: value });
   };
 
+  //form sumbit function
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -32,10 +35,10 @@ const LoginForm = () => {
     try {
       console.log(userFormData);
       const { data } = await loginUser({
-        variables: {...userFormData}
+        variables: { ...userFormData },
       });
       if (error) {
-        throw new Error('something went wrong!');
+        throw new Error("something went wrong!");
       }
       Auth.login(data.login.token);
     } catch (err) {
@@ -49,7 +52,7 @@ const LoginForm = () => {
       password: "",
     });
   };
-
+//return login jsx
   return (
     <>
       <Form noValidate validated={validated} onSubmit={handleFormSubmit}>

@@ -1,31 +1,24 @@
-import {
-  Container,
-  Card,
-  Button,
-  Row,
-  Col
-} from 'react-bootstrap';
-
+//import external libraries
+import {Container, Card, Button, Row, Col} from 'react-bootstrap';
 import { removeBookId } from '../utils/localStorage';
 import { useQuery , useMutation} from '@apollo/client';
+//import local files
 import {QUERY_GET_ME} from '../utils/queries';
 import { REMOVE_BOOK } from '../utils/mutations';
 
-
-
 const SavedBooks = () => {
-  const {loading, data} = useQuery(QUERY_GET_ME);
-  const userData = data?.me || {};
+  const {loading, data} = useQuery(QUERY_GET_ME); //configure uesQuery hook for get me query
+  const userData = data?.me || {}; //if data.me exists use it otherwise set to empty object
 
-  const [removeBook, removeError] = useMutation(REMOVE_BOOK);
+  const [removeBook, removeError] = useMutation(REMOVE_BOOK); //create removeBook intance of useMutation hook
 
 
-  // create function that accepts the book's mongo _id value as param and deletes the book from the database
+  // function that accepts the book's mongo _id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
     
     try {
       removeBookId(bookId);
-      return removeBook({variables: {bookId}});
+      return removeBook({variables: {bookId}}); //call useMutation function to update database
     } catch (err) {
       console.error(err);
     }
