@@ -71,7 +71,7 @@ THEN I am logged out of the site and presented with a menu with the options Sear
 then from the terminal inside the 'develop' directory, run the following command to install the necessary dependancies.
        
     npm install
-    npm run build
+    npm run start
 
 
 ## Testing
@@ -91,6 +91,7 @@ Then open the application in the browser
 https://github.com/mlewis89/wk21_MERN_Book-Search
 
 ## Render Hosting
+https://wk21-mern-book-search.onrender.com/
 
 ## Screenshots of Completed Challenge
 ![Snapshot of the completed application](./assets/Capture1.PNG)
